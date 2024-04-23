@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <title>Add Data</title>
+</head>
+<body>
+    <h2>Add Data</h2>
+    
+     <!-- Form for adding UserProfile -->
+     <h3>Add UserProfile</h3>
+     <form action="/add_userprofile/" method="POST">
+         {% csrf_token %}
+         <label for="username">Username:</label><br>
+         <input type="text" id="username" name="username"><br>
+         <label for="password">Password:</label><br>
+         <input type="password" id="password" name="password"><br>
+         <label for="role">Role:</label><br>
+         <input type="text" id="role" name="role"><br>
+         <label for="type">Type:</label><br>
+         <input type="text" id="type" name="type"><br><br>
+         <input type="submit" value="Submit">
+     </form>
+     
+     <!-- Form for adding CustomerProfile -->
+     <h3>Add CustomerProfile</h3>
+     <form action="/customer_profile/" method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+         <label for="user_profile">User Profile ID:</label><br>
+         <input type="text" id="user_profile" name="user_profile"><br>
+         <label for="city">City:</label><br>
+         <input type="text" id="city" name="city"><br>
+         <label for="phone_number">Phone Number:</label><br>
+         <input type="text" id="phone_number" name="phone_number"><br>
+         <label for="email">Email:</label><br>
+         <input type="email" id="email" name="email"><br>
+         <label for="image">Profile Image:</label><br>
+         <input type="file" id="image" name="image"><br><br>
+         <input type="submit" value="Submit">
+     </form>
+ 
+     <!-- Form for adding SellerProfile -->
+     <h3>Add SellerProfile</h3>
+     <form action="/seller_profile/" method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+         <label for="user_profile">User Profile ID:</label><br>
+         <input type="text" id="user_profile" name="user_profile"><br>
+         <label for="city">City:</label><br>
+         <input type="text" id="city" name="city"><br>
+         <label for="phone_number">Phone Number:</label><br>
+         <input type="text" id="phone_number" name="phone_number"><br>
+         <label for="email">Email:</label><br>
+         <input type="email" id="email" name="email"><br>
+         <label for="years_of_experience">Years of Experience:</label><br>
+         <input type of="number" id="years_of_experience" name="years_of_experience"><br>
+         <label for="bio">Bio:</label><br>
+         <textarea id="bio" name="bio"></textarea><br>
+         <label for="address">Address:</label><br>
+         <textarea id="address" name="address"></textarea><br>
+         <label for="image">Profile Image:</label><br>
+         <input type="file" id="image" name="image"><br><br>
+         <input type="submit" value="Submit">
+     </form>
+     
+
+    <!-- Form for adding Service -->
+    <h3>Add Service</h3>
+    <form action="/add_service/" method="POST">
+        {% csrf_token %}
+        <label for="kind">Kind:</label><br>
+        <input type="text" id="kind" name="kind"><br>
+        <label for="price">Price:</label><br>
+        <input type="number" id="price" name="price" step="0.01"><br>
+    
+        <input type="submit" value="Submit">
+    </form>
+
+    <!-- Form for adding PicsPosts -->
+    <h3>Add PicsPosts</h3>
+    service_type: <input id="service_type" /> description:<input id="description" />
+    <input type="file" id="spic" />
+    <button onclick="add_picsposts()">Add</button>
+
+
+    <!-- Form for adding Appointment -->
+    <h3>Add Appointment</h3>
+    <form action="/add_appointment/" method="POST">
+        {% csrf_token %}
+        <label for="seller">Seller ID:</label><br>
+        <input type="text" id="seller" name="seller"><br>
+        <label for="customer">Customer ID:</label><br>
+        <input type="text" id="customer" name="customer"><br>
+        <label for="type_of_service">Type of Service ID:</label><br>
+        <input type="text" id="type_of_service" name="type_of_service"><br>
+        <label for="price">Price:</label><br>
+        <input type="number" id="price" name="price" step="0.01"><br>
+        <label for="approved">Approved:</label><br>
+        <input type="text" id="approved" name="approved"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <!-- Form for adding NextAppointment -->
+    <h3>Add NextAppointment</h3>
+    <form action="/add_nextappointment/" method="POST">
+        {% csrf_token %}
+        <label for="customer">Customer ID:</label><br>
+        <input type="text" id="customer" name="customer"><br>
+        <label for="seller">Seller ID:</label><br>
+        <input type="text" id="seller" name="seller"><br>
+        <label for="type_of_service">Type of Service ID:</label><br>
+        <input type="text" id="type_of_service" name="type_of_service"><br>
+        <label for="price">Price:</label><br>
+        <input type="number" id="price" name="price" step="0.01"><br>
+        <label for="approved">Approved:</label><br>
+        <input type="text" id="approved" name="approved"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <div id="display"></div>
+
+
+    <script>
+        const MY_SERVER = "http://127.0.0.1:8000/";
+        const add_picsposts = () => {
+          const formData = new FormData();
+          formData.append("service_type", service_type.value);
+          formData.append("description", description.value);
+          formData.append("image", spic.files[0]);
+  
+  
+          axios.post('http://127.0.0.1:8000/pics_posts/', formData).then((r) => loadData());
+
+        };
+  
+  
+        const loadData = async () => {
+          res = await axios.get("http://127.0.0.1:8000/pics_posts/");
+          display.innerHTML = res.data.map(
+            (stu) => `<div>
+             <h2> ${stu.service_type} ,${stu.description} </h2>
+             <img src=${MY_SERVER}static/images/${stu.image}/>
+              </div>`
+          );
+        };
+        loadData();
+      </script>
+  
+</body>
+</html>
